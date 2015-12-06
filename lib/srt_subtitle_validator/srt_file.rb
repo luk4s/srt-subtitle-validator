@@ -1,4 +1,3 @@
-require 'pry'
 module SrtSubtitleValidator
   class SrtFile
     attr_reader :blocks, :length
