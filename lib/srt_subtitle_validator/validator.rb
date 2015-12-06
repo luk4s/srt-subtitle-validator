@@ -20,7 +20,8 @@ module SrtSubtitleValidator
       recalculate_number_sequence
 
       puts ' > Save as UTF-8 encoded file...'
-      FileUtils.cp(@new_srt.path, @path)
+      @new_srt.flush
+      FileUtils.copy(@new_srt.path, @path)
       @new_srt.close
       @new_srt.unlink
     end

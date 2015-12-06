@@ -26,7 +26,6 @@ module SrtSubtitleValidator
           validator.convert_srt(options[:without_backup])
         end
       end
-
     end
 
 
