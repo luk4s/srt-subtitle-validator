@@ -27,7 +27,6 @@ module SrtSubtitleValidator
     end
 
     def recalculate_number_sequence
-      return if @srt.blocks.count == @srt.length
       puts ' > Create new number sequence...'
       @srt.blocks.each_with_index do |block, index|
         number = index + 1
