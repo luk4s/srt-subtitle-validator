@@ -29,6 +29,19 @@ module SrtSubtitleValidator
     end
 
 
+    method_option :without_backup, :default => false, :type => :boolean, :desc => 'Skip backuping original SRT file'
+    def autofix(files)
+      Array(files).each do |file|
+        validator = SrtSubtitleValidator::Validator.new(file)
+        if validator.valid?
+          say 'SRT file looks like OK :)', :green
+        else
+          validator.convert_srt(options[:without_backup])
+        end
+      end
+    end
+
+
     default_task :check
   end
 end
