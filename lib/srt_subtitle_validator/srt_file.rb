@@ -2,9 +2,10 @@ module SrtSubtitleValidator
   class SrtFile
     attr_reader :blocks, :length
     attr_accessor :errors
-    def initialize(source)
+    def initialize(source, logger = nil)
+      @logger = logger || Logger.new(STDOUT)
       @errors = Array.new
-      x = source.dup.encode('utf-8').gsub(/\r/, '')
+      x = source.dup.encode(Encoding::UTF_8).gsub(/\r/, '')
       @srt_dialog_blocks = Hash.new
       @blocks = x.split(/^\r?\n/m).map { |n| i = SrtBlock.new(n); @srt_dialog_blocks[i.dialog_number] = i; i }
       @length = !@blocks.empty? && @blocks.last.dialog_number || 0
