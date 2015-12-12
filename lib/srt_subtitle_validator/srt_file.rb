@@ -7,7 +7,7 @@ module SrtSubtitleValidator
       @errors = Array.new
       x = source.dup.encode(Encoding::UTF_8).gsub(/\r/, '')
       @srt_dialog_blocks = Hash.new
-      @blocks = x.split(/^\r?\n/m).map { |n| i = SrtBlock.new(n); @srt_dialog_blocks[i.dialog_number] = i; i }
+      @blocks = x.split(/^\r?\n+/m).map { |n| i = SrtBlock.new(n); @srt_dialog_blocks[i.dialog_number] = i; i }
       @length = !@blocks.empty? && @blocks.last.dialog_number || 0
       @errors << 'File is zero size' if @length.zero?
     end

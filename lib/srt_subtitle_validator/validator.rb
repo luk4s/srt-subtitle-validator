@@ -4,7 +4,7 @@ class InvalidFile < ArgumentError; end
 module SrtSubtitleValidator
   class Validator
 
-    attr_reader :srt
+    attr_reader :srt, :path, :file_name
 
     def initialize(file_path, encoding = nil, logger = nil)
       @logger = logger || Logger.new(STDOUT)
@@ -12,7 +12,6 @@ module SrtSubtitleValidator
       raise InvalidFile unless File.extname(@path) == '.srt'
       @file_name = File.basename(@path)
       parse_srt(File.read(@path, :encoding => (encoding || Encoding::UTF_8)))
-      @logger.info ">> Proccess #{@file_name}"
     end
 
     def valid?
