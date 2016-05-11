@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 
-if File.exists?(File.join(File.expand_path('../..', __FILE__), '.git'))
-  lib_path = File.expand_path('../../lib', __FILE__)
-  $:.unshift(lib_path)
-end
+lib = File.join(File.dirname(__FILE__), '..', 'lib')
+$LOAD_PATH.unshift(lib) if !$LOAD_PATH.include?(lib)
 
 require 'srt_subtitle_validator/cli'
