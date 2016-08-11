@@ -1,14 +1,16 @@
 require 'srt_subtitle_validator/srt_file'
-require 'logger'
 class InvalidFile < ArgumentError; end
 module SrtSubtitleValidator
   class Validator
 
+    require 'logger'
+    require 'tempfile'
+  
     attr_reader :srt, :path, :file_name
 
     def initialize(file_path, encoding = nil, logger = nil)
       @logger = logger || Logger.new(STDOUT)
-      @path = File.absolute_path(file_path)
+      @path = File.absolute_path(file_path).strip
       raise InvalidFile unless File.extname(@path) == '.srt'
       @file_name = File.basename(@path)
       parse_srt(File.read(@path, :encoding => (encoding || Encoding::UTF_8)))
