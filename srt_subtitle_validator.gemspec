@@ -9,10 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Lukáš Pokorný']
   spec.email         = ['luk4s.pokorny@gmail.com']
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = 'localhost'
-  end
-
   spec.summary       = 'SRT subtitle file checker, validator'
   spec.description   = 'For check encoding and srt subtitle number sequence'
   spec.homepage      = 'https://github.com/luk4s/srt-subtitle-validator'
@@ -23,9 +19,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.8'
+  spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'pry', '~> 0.10'
 
-  spec.add_runtime_dependency 'thor', '~> 0.19'
+  spec.add_runtime_dependency 'thor', '~> 0.20'
 end
