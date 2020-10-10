@@ -1,19 +1,23 @@
+require 'srt_subtitle_validator/srt_block'
 require 'srt_subtitle_validator/srt_file'
+
 class InvalidFile < ArgumentError; end
+
 module SrtSubtitleValidator
   class Validator
 
     require 'logger'
     require 'tempfile'
-  
+
     attr_reader :srt, :path, :file_name
 
     def initialize(file_path, encoding = nil, logger = nil)
       @logger = logger || Logger.new(STDOUT)
       @path = File.absolute_path(file_path).strip
       raise InvalidFile unless File.extname(@path) == '.srt'
+
       @file_name = File.basename(@path)
-      parse_srt(File.read(@path, :encoding => (encoding || Encoding::UTF_8)))
+      parse_srt(File.read(@path, encoding: (encoding || Encoding::UTF_8)))
     end
 
     def valid?
@@ -43,7 +47,7 @@ module SrtSubtitleValidator
       @logger.info ' > Create new number sequence...'
       @srt.blocks.each_with_index do |block, index|
         number = index + 1
-        n = SrtSubtitleValidator::SrtFile::SrtBlock.new(number, block.dialog_time, block.dialog_text)
+        n = SrtSubtitleValidator::SrtBlock.new(number, block.dialog_time, block.dialog_text)
         @new_srt.write(n.to_s)
       end
     end
@@ -51,15 +55,12 @@ module SrtSubtitleValidator
     def output_file(output = nil)
       if output.to_s.empty?
         @path
+      elsif File.directory?(output)
+        File.join(output, @file_name)
       else
-        if File.directory?(output)
-          File.join(output, @file_name)
-        else
-          output
-        end
+        output
       end
     end
-
 
     def backup_original_file
       @logger.info ' > Create backup...'
@@ -73,15 +74,13 @@ module SrtSubtitleValidator
     end
 
     def parse_srt(raw, with_fallback = true)
-      begin
-        @srt = SrtSubtitleValidator::SrtFile.new(raw)
-      rescue ArgumentError => e
-        if e.to_s == 'invalid byte sequence in UTF-8' && with_fallback
-          parse_srt(raw.force_encoding(Encoding::CP1250), false)
-          @srt.errors << 'Invalid encoding'
-        end
+      @srt = SrtSubtitleValidator::SrtFile.new(raw)
+      @srt.valid?
+    rescue ArgumentError => e
+      if e.to_s == 'invalid byte sequence in UTF-8' && with_fallback
+        parse_srt(raw.force_encoding(Encoding::CP1250), false)
+        @srt.errors << 'Invalid encoding'
       end
-
     end
 
   end

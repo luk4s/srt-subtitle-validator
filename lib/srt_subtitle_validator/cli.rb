@@ -13,14 +13,13 @@ module SrtSubtitleValidator
                  desc: 'Show version number and quit'
 
     def self.srt_default_options
-      method_option :without_backup, :default => false, :type => :boolean, :desc => 'Skip backuping original SRT file'
-      method_option :output, :aliases => '-o', :default => nil, :type => :string, :desc => 'Output directory (file)'
-      method_option :encoding, :aliases => '-e', :default => Encoding::CP1250, :type => :string, :desc => 'Output directory (file)'
+      method_option :without_backup, default: false, type: :boolean, desc: 'Skip backuping original SRT file'
+      method_option :output, aliases: '-o', default: nil, type: :string, desc: 'Output directory (file)'
+      method_option :encoding, aliases: '-e', default: "cp1250", type: :string, desc: 'Output directory (file)'
     end
 
     srt_default_options
     desc 'check', 'Check SRT file. '
-
     def check(*files)
       files_to_convert = Array.new
       Array(files).each do |file|
@@ -35,7 +34,7 @@ module SrtSubtitleValidator
         end
       end
       if files_to_convert.any? && yes?("Try to convert  #{files_to_convert.length} files ?")
-        files_to_convert.each{|f| f.convert_srt(options[:output], options[:without_backup])}
+        files_to_convert.each { |f| f.convert_srt(options[:output], options[:without_backup]) }
       end
 
     end
